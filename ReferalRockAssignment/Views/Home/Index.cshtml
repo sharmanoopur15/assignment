@@ -1,0 +1,114 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+
+<div class="jumbotron">
+    <iframe src="https://assignment.referralrock.com/promotion/1/?widget=1" style="background-color: white; height:800px; width:100%;"></iframe>
+</div>
+<div id="WorkProductDiv" style="width:700px">
+    <table id="opacontent"></table>
+    <div id="opapager"></div>
+</div>
+<script src="http://localhost:58308/Scripts/jquery-1.10.2.min.js"></script>
+<link href="~/Content/jquery.jqGrid/ui.jqgrid.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.jqGrid.js"></script>
+
+<div id="divResult"></div>
+<br />
+Refferal Rock Assignment 
+<br />
+<div id="divReferral"></div>
+<div class="row">
+    <button onclick="GetAll()">Get Info</button>
+    <script type="text/javascript">
+        function GetAll() {
+            debugger;
+
+            $.ajax({
+                url: '@Url.Action("GetResponse", "Home")',
+                data: { method: 'api/Members' },
+                dataType: 'json',
+                type: 'GET',
+                crossDomain: true,
+
+
+                //beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Basic ' + 'sharma.noopur15@gmail.com:Password$1'); },
+                success: function (data) {
+                    debugger;
+
+
+
+                    WriteResponse(data.members);
+                },
+
+                complete: function (jqXHR) {
+                    debugger;
+                   // WriteResponse(data);
+                },
+                error: function (request, status, error) {
+                    debugger;
+                    //alert(x + '\n' + y + '\n' + z);
+                }
+            });
+        }
+
+
+
+
+        function WriteResponse(data) {
+           // debugger;
+            var strResult = "<table border='1'><th>Name</th><th>Email</th>";
+           // debugger;
+            $.each(data, function (index, data) {
+               // debugger;
+                strResult += "<tr><td>" + data.firstName + ' ' + data.lastName + "</td><td> " + data.email + "</td></tr>";
+            });
+            strResult += "</table>";
+            $("#divResult").html(strResult);
+            getReferals();
+        }
+
+        function WriteResponseReferal(data) {
+            var strResult = "<table border='1'><th>Name</th><th>Amount</th><th>Status</th>";
+           // debugger;
+            $.each(data, function (index, data) {
+               // debugger;
+                strResult += "<tr><td>" + data.firstName + ' ' + data.lastName + "</td><td> " + data.amount + "</td> <td> " + data.status + "</td></tr>";
+            });
+            strResult += "</table>";
+            $("#divReferral").html(strResult);
+        }
+
+        function getReferals()
+        {
+
+            $.ajax({
+                url: '@Url.Action("GetResponse", "Home")',
+                data: { method: 'api/Referrals' },
+                dataType: 'json',
+                type: 'GET',
+                crossDomain: true,
+
+
+                //beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Basic ' + 'sharma.noopur15@gmail.com:Password$1'); },
+                success: function (data) {
+                   // debugger;
+
+
+
+                    WriteResponseReferal(data.referrals);
+                },
+
+                complete: function (jqXHR) {
+                  //  debugger;
+                    // WriteResponse(data);
+                },
+                error: function (request, status, error) {
+                    //debugger;
+                    //alert(x + '\n' + y + '\n' + z);
+                }
+            });
+        }
+    </script>
+</div>
